@@ -40,7 +40,7 @@ try {
     try {
       await page.goto(baseURL, { waitUntil: 'networkidle', timeout: 20000 });
       await page.locator('#loading').waitFor({ state: 'detached', timeout: 20000 });
-      if (await page.locator('#closeNotice').isVisible()) await page.locator('#closeNotice').click();
+
       await page.locator('#sltMap').selectOption(String(scenario.map));
       await page.locator('#in_names').fill('수박*2,키위*2,귤*2');
       await page.locator('#in_names').blur();

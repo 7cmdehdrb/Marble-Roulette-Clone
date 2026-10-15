@@ -11,7 +11,7 @@ try {
   page.on('pageerror', error => errors.push(error.message));
   await page.goto(baseURL);
   await page.locator('#loading').waitFor({ state: 'detached', timeout: 15000 });
-  await page.locator('#closeNotice').click();
+
   await page.screenshot({ path: 'research/browser-controls/mobile-ready.png' });
   await page.locator('#btnToggleSettings').click();
   await page.locator('#chkDarkMode').uncheck({ timeout: 3000 });

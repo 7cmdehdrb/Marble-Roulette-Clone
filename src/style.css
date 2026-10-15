@@ -49,10 +49,8 @@ div.copyright a {
   mask-image:url(/assets/icons/play.svg)}
 .icon.shuffle {
   mask-image:url(/assets/icons/shuffle.svg)}
-.icon.megaphone {
-  mask-image:url(/assets/icons/megaphone.svg)}
-.icon.shop {
-  mask-image:url(/assets/icons/shop.svg)}
+
+
 .icon.record {
   mask-image:url(/assets/icons/record.svg)}
 .icon.map {
@@ -92,7 +90,7 @@ div.copyright a {
   width:100%;
   min-height:calc(5rem + 35px);
   font-size:14pt}
-#settings button,#settings .btn {
+#settings button {
   color:#fefefe;
   background:#222;
   border:none;
@@ -100,17 +98,12 @@ div.copyright a {
   padding:5px 10px;
   display:inline-block;
   position:relative}
-#settings button:active:after,#settings .btn:active:after {
+#settings button:active:after {
   content:"";
   background:#00000080;
   position:absolute;
   inset:0}
-#settings a.btn {
-  align-items:center;
-  gap:4px;
-  font-size:10pt;
-  text-decoration:none;
-  display:inline-flex}
+
 #settings div.theme {
   color:#fff;
   flex-grow:1;
@@ -126,8 +119,7 @@ div.copyright a {
   align-items:center;
   gap:2px;
   display:flex}
-#settings div.left .actions div.sep {
-  flex-grow:1}
+
 #settings .btn-toggle-settings {
   display:none}
 #settings div.right {
@@ -271,57 +263,13 @@ div.copyright a {
   box-sizing:border-box;
   text-align:center;
   width:0}
-#notice {
-  z-index:1001;
-  color:#333;
-  background:#ffffffe6;
-  border-radius:30px;
-  flex-direction:column;
-  width:500px;
-  max-width:90%;
-  padding:10px;
-  display:none;
-  position:fixed;
-  top:50%;
-  left:50%;
-  overflow:hidden;
-  transform:translate(-50%,-50%)}
-#notice h2 {
-  color:#000;
-  text-transform:uppercase;
-  background-color:#58c9af;
-  border-bottom:4px solid #2c8470;
-  justify-content:center;
-  align-items:center;
-  margin:-10px -10px 0;
-  padding:10px 5px 10px .5em;
-  font-size:2em;
-  font-weight:700;
-  display:flex}
-#notice div.notice-body {
-  padding:0 .5em}
-#notice div.notice-body h3 {
-  margin:.83em 0;
-  font-size:1.5em}
-#notice div.notice-action {
-  justify-content:center;
-  display:flex}
-#notice div.notice-action button {
-  color:#fefefe;
-  background:#222;
-  border:none;
-  border-radius:10px;
-  width:50%;
-  height:50px;
-  padding:5px 10px;
-  font-size:20px;
-  position:relative;
-  overflow:hidden}
-#notice div.notice-action button:active:after {
-  content:"";
-  background:#00000080;
-  position:absolute;
-  inset:0}
+
+
+
+
+
+
+
 @media screen and (width<=750px) {
   #settings {
   opacity:1;
@@ -383,24 +331,8 @@ div.copyright a {
 #settings div.right div.row .icon {
   width:15px;
   height:15px}
-#notice {
-  box-sizing:border-box;
-  z-index:1001;
-  color:#333;
-  background:#ffffffe6;
-  border-radius:4px;
-  flex-direction:column;
-  width:100%;
-  max-width:100%;
-  height:100%;
-  padding:5px 10px;
-  display:none;
-  position:fixed;
-  top:0;
-  left:0;
-  transform:none}
-#notice div.notice-body {
-  flex-grow:1}
+
+
 }
 div.toast {
   z-index:1000;
@@ -421,42 +353,10 @@ to {
   opacity:1;
   transform:translate(-50%)}
 }
-.link_donation {
-  color:#fff;
-  text-shadow:-2px 0 #000,0 2px #000,2px 0 #000,0 -2px #000;
-  background:repeating-linear-gradient(45deg,#fa0,#fa0 20px,#222 20px 40px);
-  border-radius:.5em;
-  justify-content:center;
-  align-items:center;
-  width:100%;
-  margin-bottom:1em;
-  padding:1em;
-  font-size:1.5em;
-  font-weight:700;
-  text-decoration:none;
-  display:flex}
-.shop-button {
-  color:#fff;
-  flex-direction:row;
-  justify-content:center;
-  align-items:center;
-  width:fit-content;
-  margin:0 auto;
-  padding:.2em .4em .4em;
-  font-size:32px;
-  font-weight:700;
-  line-height:48px;
-  text-decoration:none;
-  display:flex}
-.shop-button img {
-  width:48px;
-  height:48px;
-  margin-bottom:-4px;
-  margin-right:.2em}
-.shop-button {
-  background-color:#07f;
-  border:2px solid #000;
-  border-radius:10px}
+
+
+
+
 dialog.map-browser {
   color:#fefefe;
   background:#555;
@@ -649,7 +549,7 @@ html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background:
 html.light, html.light body { background: #eee; }
 body { font-family: Arial, 'Malgun Gothic', sans-serif; }
 button, select, input { font: inherit; }
-button, a.btn, input[type=checkbox], select { cursor: pointer; }
+button, input[type=checkbox], select { cursor: pointer; }
 button:disabled { cursor: default; opacity: .45; }
 :focus-visible { outline: 2px solid #58c9af; outline-offset: 3px; }
 #settings { font-size: 14px; }
@@ -671,9 +571,9 @@ button:disabled { cursor: default; opacity: .45; }
 @keyframes loading-pulse { to { opacity: .3; } }
 .race-reset { position: fixed; z-index: 1000; bottom: 24px; left: 16px; border: 1px solid #666; border-radius: 5px; padding: 8px 12px; background: #222c; color: #fff; font-size: 13px; cursor: pointer; }
 .race-reset[hidden] { display: none; }
-#notice { font-family: Arial, 'Malgun Gothic', sans-serif; }
-#notice h2 { font-family: Georgia, serif; }
-#notice .notice-body p { line-height: 1.6; font-size: 14px; }
+
+
+
 div.toast { z-index: 1010; color: #222; max-width: 90vw; animation: .2s linear fade-in; }
 .map-browser .mb-card { padding: 10px; }
 .map-browser .mb-card .mb-thumb { height: 90px; flex-basis: 66px; }
@@ -688,11 +588,45 @@ div.toast { z-index: 1010; color: #222; max-width: 90vw; animation: .2s linear f
   #settings div.right div.row.row-theme { display: flex; }
   #settings .collapsible-rows .row-theme .theme { justify-content: flex-end; }
   #settings .collapsible-rows .row-theme .icon { width: 20px; height: 20px; }
-  #notice { inset: 50% auto auto 50%; transform: translate(-50%, -50%); border-radius: 20px; width: 92%; max-width: 500px; height: auto; max-height: 90dvh; padding: 10px; }
-  #notice .notice-body { overflow-y: auto; }
-  #notice .notice-body h3 { font-size: 1.3em; }
-  #notice .notice-action { padding-bottom: 4px; }
+
+
+
+
   dialog.map-browser { width: 94vw; max-width: 94vw; height: 78dvh; border-radius: 12px; }
   .copyright { font-size: 10px !important; }
 }
 @media (prefers-reduced-motion: reduce) { #loading span { animation: none; } }
+
+/* Skill settings stay beside the names on desktop and inside mobile settings. */
+#settings { gap: 16px; max-width: calc(100vw - 32px); max-height: calc(100dvh - 48px); overflow-y: auto; scrollbar-width: thin; }
+#settings div.left { display: flex; flex-direction: column; }
+#settings textarea { flex: 1; resize: none; }
+#settings .names-hint { color: #eee; font-size: 11px; line-height: 1.6; margin: 7px 0; }
+#settings div.left .actions { gap: 8px; }
+#settings .actions button { flex: 1; justify-content: center; min-height: 36px; }
+#settings .skill-settings { min-width: 0; margin: 8px 0; padding: 10px; color: #fff; border: 1px solid #939393; border-radius: 8px; }
+#settings .skill-settings legend { padding: 0 6px; font-size: 12px; font-weight: 700; }
+#settings .skill-controls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; }
+#settings .skill-control { min-width: 0; }
+#settings .skill-control label { display: flex; align-items: center; justify-content: space-between; gap: 4px; font-size: 12px; line-height: 1.4; }
+#settings .skill-control output { color: #9bf5d8; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+#settings .skill-control input[type=range] { display: block; width: 100%; margin: 9px 0 5px; accent-color: #58c9af; cursor: pointer; }
+#settings .skill-scale { display: flex; justify-content: space-between; color: #e0e0e0; font-size: 10px; }
+#settings .skill-count { display: flex; align-items: center; gap: 6px; margin: 5px 0 3px; font-size: 12px; }
+#settings .skill-count input { width: 78px; height: 27px; padding: 3px 6px; border: 0; border-radius: 4px; background: #eee; color: #222; text-align: center; }
+#settings .skill-limit small { font-size: 10px; color: #e0e0e0; }
+#settings .skill-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 12px; }
+#settings .skill-footer p { margin: 0; font-size: 11px; line-height: 1.5; }
+#settings .skill-footer button { flex-shrink: 0; padding: 4px 8px; font-size: 11px; background: #444; }
+#settings .skill-hint { margin: 6px 0 0; font-size: 10px; line-height: 1.6; color: #e0e0e0; }
+#settings .skill-settings:disabled .skill-controls { opacity: .45; }
+#settings .skill-settings:disabled input { cursor: default; }
+@media (max-width: 750px) {
+  #settings { max-height: calc(100dvh - 80px); }
+  #settings textarea { flex: none; }
+  #settings .skill-settings { margin: 10px 0; }
+  #settings .skill-controls { gap: 12px; }
+  #settings div.right div.row.row-toggles .toggle-item { flex-direction: row; align-items: center; gap: 6px; }
+  #settings div.right div.row.row-toggles label { width: auto; margin: 0; }
+  #settings div.right div.row.row-toggles input[type=checkbox] { margin: 0; }
+}

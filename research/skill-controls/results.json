@@ -1,0 +1,13 @@
+{
+  "checks": [
+    "no Shop or notice flow; ready on first visit",
+    "four controls bind to engine settings and persist across reloads",
+    "100% chance invokes real physics once per marble and respects the one-use cap",
+    "0% chance produces no skill activations",
+    "skill off disables controls; defaults restore all four settings",
+    "controls fit desktop and mobile layouts at 320–1440px",
+    "invalid saved settings recover to defaults without page errors"
+  ],
+  "pageErrors": [],
+  "status": "passed"
+}

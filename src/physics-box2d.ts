@@ -1,6 +1,7 @@
 import Box2DFactory from 'box2d-wasm';
 import type { StageDef } from './data/maps';
 import type { IPhysics } from './IPhysics';
+import options, { normalizeSkillSettings } from './options';
 import type { MapEntity, MapEntityState } from './types/MapEntity.type';
 
 export class Box2dPhysics implements IPhysics {
@@ -152,6 +153,7 @@ export class Box2dPhysics implements IPhysics {
   impact(id: number): void {
     const src = this.marbleMap[id];
     if (!src) return;
+    const strength = normalizeSkillSettings(options.skillSettings).strength;
 
     Object.values(this.marbleMap).forEach((body) => {
       if (body === src) return;
@@ -163,7 +165,7 @@ export class Box2dPhysics implements IPhysics {
       if (distSq < 100) {
         distVector.Normalize();
         const power = 1 - distVector.Length() / 10;
-        distVector.op_mul(power * power * 5);
+        distVector.op_mul(power * power * 5 * strength);
         body.ApplyLinearImpulseToCenter(distVector, true);
       }
     });

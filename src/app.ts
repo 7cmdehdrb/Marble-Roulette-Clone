@@ -1,6 +1,6 @@
 import { Roulette } from './roulette';
 import { stages, type StageDef } from './data/maps';
-import options from './options';
+import options, { DEFAULT_SKILL_SETTINGS, normalizeSkillSettings } from './options';
 import { normalizeNames } from './nameInput';
 
 const $ = <T extends HTMLElement>(selector: string) => document.querySelector<T>(selector)!;
@@ -13,11 +13,15 @@ const mapSelect = $<HTMLSelectElement>('#sltMap');
 const rank = $<HTMLInputElement>('#in_winningRank');
 const rangeStart = $<HTMLInputElement>('#in_rangeStart');
 const rangeEnd = $<HTMLInputElement>('#in_rangeEnd');
-const notice = $('#notice');
 const gallery = $<HTMLDialogElement>('#mapGallery');
 const recording = $<HTMLInputElement>('#chkAutoRecording');
 const darkMode = $<HTMLInputElement>('#chkDarkMode');
 const skill = $<HTMLInputElement>('#chkSkill');
+const skillSettings = $<HTMLFieldSetElement>('#skillSettings');
+const skillCooldown = $<HTMLInputElement>('#skillCooldown');
+const skillChance = $<HTMLInputElement>('#skillChance');
+const skillStrength = $<HTMLInputElement>('#skillStrength');
+const skillMaxUses = $<HTMLInputElement>('#skillMaxUses');
 const mapTitles = ['운명의 수레바퀴', '버블팝', '욕망의 항아리', '밤을 달리다 (by item4)'];
 type WinnerType = 'first' | 'last' | 'custom' | 'multi';
 let winnerType: WinnerType = 'first';
@@ -42,6 +46,48 @@ function toast(message: string) {
   node.textContent = message;
   document.body.append(node);
   setTimeout(() => node.remove(), 2400);
+}
+
+function renderSkillSettings(writeInputs = true) {
+  const value = options.skillSettings;
+  if (writeInputs) {
+    skillCooldown.value = String(value.cooldownMs / 1000);
+    skillChance.value = String(value.chancePercent);
+    skillStrength.value = String(value.strength);
+    skillMaxUses.value = String(value.maxUses);
+  }
+  const interval = `${Number((value.cooldownMs / 1000).toFixed(1))}초`;
+  const probability = `${value.chancePercent}%`;
+  const strength = `${value.strength}배`;
+  $('#skillCooldownValue').textContent = interval;
+  $('#skillChanceValue').textContent = probability;
+  $('#skillStrengthValue').textContent = strength;
+  skillCooldown.setAttribute('aria-valuetext', interval);
+  skillChance.setAttribute('aria-valuetext', probability);
+  skillStrength.setAttribute('aria-valuetext', strength);
+  skillSettings.disabled = !options.useSkills;
+  $('#skillSummary').textContent = options.useSkills
+    ? `${interval} 간격 · 확률 ${probability} · ${value.maxUses ? `구슬당 최대 ${value.maxUses}회` : '횟수 무제한'}`
+    : '스킬이 꺼져 있습니다.';
+}
+
+function updateSkillSettings(commit = false) {
+  options.skillSettings = normalizeSkillSettings({
+    cooldownMs: Number(skillCooldown.value) * 1000,
+    chancePercent: Number(skillChance.value),
+    strength: Number(skillStrength.value),
+    maxUses: Number(skillMaxUses.value),
+  });
+  renderSkillSettings(commit);
+  remember('mbr_skill_settings', JSON.stringify(options.skillSettings));
+  if (commit) prepare();
+}
+
+function restoreSkillSettings() {
+  let saved: unknown;
+  try { saved = JSON.parse(read('mbr_skill_settings') ?? 'null'); } catch { saved = null; }
+  options.skillSettings = normalizeSkillSettings(saved);
+  renderSkillSettings();
 }
 
 const roulette = new Roulette();
@@ -183,20 +229,6 @@ function buildMapGallery() {
   });
 }
 
-function openNotice() {
-  notice.style.display = 'flex';
-  settings.inert = true;
-  resetButton.inert = true;
-  $('#closeNotice').focus();
-}
-function closeNotice() {
-  notice.style.display = 'none';
-  settings.inert = false;
-  resetButton.inert = false;
-  remember('mbr_help_seen', '1');
-  $('#btnNotice').focus();
-}
-
 names.addEventListener('input', () => {
   clearTimeout(inputTimer);
   inputTimer = setTimeout(() => { prepare(); inputTimer = undefined; }, 180);
@@ -217,7 +249,22 @@ document.querySelectorAll<HTMLButtonElement>('[data-winner]').forEach(button => 
 rank.addEventListener('change', () => { winnerType = 'custom'; updateWinner(); });
 rangeStart.addEventListener('change', () => { winnerType = 'multi'; updateWinner('start'); });
 rangeEnd.addEventListener('change', () => { winnerType = 'multi'; updateWinner('end'); });
-skill.addEventListener('change', () => { options.useSkills = skill.checked; remember('mbr_skills', String(skill.checked)); });
+skill.addEventListener('change', () => {
+  options.useSkills = skill.checked;
+  remember('mbr_skills', String(skill.checked));
+  renderSkillSettings();
+  prepare();
+});
+for (const input of [skillCooldown, skillChance, skillStrength, skillMaxUses]) {
+  input.addEventListener('input', () => updateSkillSettings());
+  input.addEventListener('change', () => updateSkillSettings(true));
+}
+$('#btnSkillDefaults').addEventListener('click', () => {
+  options.skillSettings = { ...DEFAULT_SKILL_SETTINGS };
+  renderSkillSettings();
+  remember('mbr_skill_settings', JSON.stringify(options.skillSettings));
+  prepare();
+});
 darkMode.addEventListener('change', () => {
   roulette.setTheme(darkMode.checked ? 'dark' : 'light');
   document.documentElement.classList.toggle('light', !darkMode.checked);
@@ -229,16 +276,10 @@ $('#btnToggleSettings').addEventListener('click', () => {
   $('.toggle-arrow').textContent = collapsed ? '▲' : '▼';
   $('#btnToggleSettings').setAttribute('aria-expanded', String(!collapsed));
 });
-$('#btnNotice').addEventListener('click', openNotice);
-$('#closeNotice').addEventListener('click', closeNotice);
 $('#btnMoreMaps').addEventListener('click', () => gallery.showModal());
 $('#closeMaps').addEventListener('click', () => gallery.close());
-notice.addEventListener('keydown', event => {
-  if (event.key === 'Escape') closeNotice();
-  if (event.key === 'Tab') { event.preventDefault(); $('#closeNotice').focus(); }
-});
 document.addEventListener('keydown', event => {
-  if (event.key === 'Escape' && running && !gallery.open && notice.style.display !== 'flex') reset();
+  if (event.key === 'Escape' && running && !gallery.open) reset();
 });
 roulette.addEventListener('goal', event => {
   running = false;
@@ -268,6 +309,7 @@ function initialize() {
   darkMode.dispatchEvent(new Event('change'));
   skill.checked = read('mbr_skills') !== 'false';
   options.useSkills = skill.checked;
+  restoreSkillSettings();
   if (!('MediaRecorder' in window) || !HTMLCanvasElement.prototype.captureStream) {
     recording.disabled = true;
     recording.title = '이 브라우저는 화면 녹화를 지원하지 않습니다.';
@@ -276,6 +318,5 @@ function initialize() {
   if (Number.isInteger(savedMap) && savedMap >= 0 && savedMap < stages.length) changeMap(savedMap);
   else prepare();
   $('#loading').remove();
-  if (!read('mbr_help_seen')) openNotice();
 }
 initialize();

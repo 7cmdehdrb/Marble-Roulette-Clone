@@ -1,6 +1,7 @@
 import { Skills, STUCK_DELAY, Themes } from './data/constants';
 import type { IPhysics } from './IPhysics';
 import options from './options';
+import { SkillTrigger } from './skillTrigger';
 import type { ColorTheme } from './types/ColorTheme';
 import type { VectorLike } from './types/VectorLike';
 import { transformGuard } from './utils/transformGuard';
@@ -18,9 +19,7 @@ export class Marble {
   skill: Skills = Skills.None;
   isActive: boolean = false;
 
-  private _skillRate = 0.0005;
-  private _coolTime = 5000;
-  private _maxCoolTime = 5000;
+  private _skillTrigger: SkillTrigger;
   private _stuckTime = 0;
   private lastPosition: VectorLike = { x: 0, y: 0 };
   private theme: ColorTheme = Themes.dark;
@@ -58,9 +57,7 @@ export class Marble {
     this.weight = weight;
     this.physics = physics;
 
-    this._maxCoolTime = 1000 + (1 - this.weight) * 4000;
-    this._coolTime = this._maxCoolTime * Math.random();
-    this._skillRate = 0.2 * this.weight;
+    this._skillTrigger = new SkillTrigger(options.skillSettings, this.weight);
 
     const maxLine = Math.ceil(max / 10);
     const line = Math.floor(order / 10);
@@ -100,19 +97,8 @@ export class Marble {
       this.impact = Math.max(0, this.impact - deltaTime);
     }
     if (!this.isActive) return;
-    if (options.useSkills) {
-      this._updateSkillInformation(deltaTime);
-    }
-  }
-
-  private _updateSkillInformation(deltaTime: number) {
-    if (this._coolTime > 0) {
-      this._coolTime -= deltaTime;
-    }
-
-    if (this._coolTime <= 0) {
-      this.skill = Math.random() < this._skillRate ? Skills.Impact : Skills.None;
-      this._coolTime = this._maxCoolTime;
+    if (this._skillTrigger.update(deltaTime, options.useSkills)) {
+      this.skill = Skills.Impact;
     }
   }
 
@@ -215,10 +201,14 @@ export class Marble {
   }
 
   private _renderCoolTime(ctx: CanvasRenderingContext2D, zoom: number) {
+    if (this._skillTrigger.exhausted) return;
     ctx.strokeStyle = this.theme.coolTimeIndicator;
     ctx.lineWidth = 1 / zoom;
     ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size / 2 + 2 / zoom, rad(270), rad(270 + (360 * this._coolTime) / this._maxCoolTime));
+    ctx.arc(
+      this.x, this.y, this.size / 2 + 2 / zoom,
+      rad(270), rad(270 + (360 * this._skillTrigger.remainingMs) / this._skillTrigger.intervalMs)
+    );
     ctx.stroke();
   }
 }

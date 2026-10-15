@@ -61,7 +61,7 @@ try {
       assert.match(responses[0].type, /^application\/wasm/);
       assert.equal(responses[0].magic, '0061736d', 'HTML fallback must never be used as WASM');
       assert.match(responses[0].path, simd ? /Box2D\.simd\.wasm$/ : /Box2D\.wasm$/);
-      if (await page.locator('#closeNotice').isVisible()) await page.locator('#closeNotice').click();
+
       await page.locator('#btnStart').click();
       await page.waitForFunction(() => document.querySelector('#settings').dataset.state === 'running');
       await page.locator('#btnReset').click();
