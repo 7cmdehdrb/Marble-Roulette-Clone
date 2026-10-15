@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#000000" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="description" content="구슬을 굴려 당첨자를 뽑는 마블 룰렛. 이름을 입력하고 네 가지 맵에서 레이스를 시작하세요." />
+    <title>Marble Roulette 마블룰렛</title>
+  </head>
+  <body>
+    <h1 class="sr-only">Marble Roulette 마블 룰렛 — 랜덤 추첨기</h1>
+    <div id="loading" role="status">마블 룰렛을 준비하고 있습니다<span>● ● ●</span></div>
+    <div id="settings" class="settings" aria-label="룰렛 설정">
+      <div class="right">
+        <button id="btnToggleSettings" class="btn-toggle-settings" aria-expanded="false" aria-controls="extraSettings">
+          <span>설정</span><i class="toggle-arrow">▲</i>
+        </button>
+        <div id="extraSettings" class="collapsed collapsible-rows">
+          <div class="row">
+            <label for="sltMap"><i class="icon map" aria-hidden="true"></i> 맵</label>
+            <div class="map-picker">
+              <select id="sltMap" aria-label="맵 선택"></select>
+              <button id="btnMoreMaps" class="btn-map-action" title="맵 둘러보기" aria-label="맵 둘러보기">+</button>
+            </div>
+          </div>
+          <div class="row row-toggles">
+            <div class="toggle-item">
+              <label for="chkAutoRecording"><i class="icon record" aria-hidden="true"></i> 녹화</label>
+              <input type="checkbox" id="chkAutoRecording" />
+            </div>
+            <div class="toggle-item">
+              <label for="chkSkill"><i class="icon bomb" aria-hidden="true"></i> 스킬 활성화</label>
+              <input type="checkbox" id="chkSkill" checked />
+            </div>
+          </div>
+          <div class="row">
+            <label id="winnerLabel"><i class="icon trophy" aria-hidden="true"></i> 당첨 순위</label>
+            <div class="btn-group" role="group" aria-labelledby="winnerLabel">
+              <button class="btn-first-winner active" data-winner="first" aria-pressed="true">첫번째</button>
+              <button class="btn-last-winner" data-winner="last" aria-pressed="false">마지막</button>
+              <input type="number" id="in_winningRank" value="1" min="1" aria-label="당첨 순위 직접 입력" />
+              <button class="btn-multi-winner" data-winner="multi" aria-pressed="false">여러명</button>
+            </div>
+          </div>
+          <div class="row row-range">
+            <div class="btn-group range-group">
+              <input type="number" id="in_rangeStart" value="1" min="1" aria-label="당첨 시작 순위" />
+              <span class="range-sep">~</span>
+              <input type="number" id="in_rangeEnd" value="3" min="1" aria-label="당첨 마지막 순위" />
+            </div>
+          </div>
+          <div class="row row-theme">
+            <div class="theme">
+              <i class="icon sun" aria-hidden="true"></i>
+              <input type="checkbox" id="chkDarkMode" checked aria-label="다크 모드" />
+              <i class="icon moon" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="left">
+        <h3><label for="in_names">이름들을 입력하세요</label></h3>
+        <textarea id="in_names" placeholder="이름들을 쉼표나 엔터로 구분해서 넣어주세요" spellcheck="false" aria-describedby="namesHint">수박*2,키위*2,귤*2</textarea>
+        <span id="namesHint" class="sr-only">쉼표 또는 줄바꿈으로 구분합니다. 이름*2는 구슬 두 개, 이름/3은 스킬 가중치 3을 의미합니다.</span>
+        <div class="actions">
+          <button id="btnNotice" title="사용 방법" aria-label="사용 방법"><i class="icon megaphone" aria-hidden="true"></i></button>
+          <a href="https://marblerouletteshop.com" target="_blank" rel="noopener noreferrer" id="btnShop" class="btn" title="원본 MarbleRoulette Shop"><i class="icon shop" aria-hidden="true"></i><span>Shop</span></a>
+          <div class="sep"></div>
+          <button id="btnShuffle" disabled><i class="icon shuffle" aria-hidden="true"></i><span>섞기</span></button>
+          <button id="btnStart" disabled><i class="icon play" aria-hidden="true"></i><span>시작</span></button>
+        </div>
+      </div>
+    </div>
+    <button id="btnReset" class="race-reset" hidden title="경기를 멈추고 다시 준비">↶ 다시 준비</button>
+    <div id="notice" role="dialog" aria-modal="true" aria-labelledby="noticeTitle" tabindex="-1">
+      <h2 id="noticeTitle">Notice</h2>
+      <div class="notice-body">
+        <h3>구슬을 굴려 행운의 주인공을 뽑아보세요</h3>
+        <p>이름을 쉼표나 줄바꿈으로 구분해 입력하세요.<br /><b>수박*2</b>처럼 쓰면 같은 이름의 구슬이 2개 생깁니다. <b>이름/3</b>처럼 쓰면 스킬 가중치를 지정할 수 있습니다.</p>
+        <p>맵과 당첨 순위를 고른 뒤 <b>시작</b>을 누르세요. 경기 중 화면을 꾹 누르면 2배속, 미니맵을 누르면 원하는 위치를 볼 수 있습니다.</p>
+      </div>
+      <div class="notice-action"><button id="closeNotice">닫기</button></div>
+    </div>
+    <dialog id="mapGallery" class="map-browser" aria-labelledby="mapGalleryTitle">
+      <div class="mb-panel">
+        <header class="mb-header"><h2 id="mapGalleryTitle" class="mb-title">맵 둘러보기</h2><button id="closeMaps" class="mb-close" aria-label="맵 선택 닫기">✕</button></header>
+        <div class="mb-body"><div id="mapList" class="mb-list"></div></div>
+        <footer class="mb-footer"><a href="https://marblerouletteshop.com/maps" target="_blank" rel="noopener noreferrer">원본 맵 공유마당 ↗</a></footer>
+      </div>
+    </dialog>
+    <div id="announcement" class="sr-only" aria-live="polite"></div>
+    <div class="copyright">© 2022–2026. 마블 룰렛 by <a href="https://lazygyu.net" target="_blank" rel="noopener noreferrer">lazygyu</a> · MIT</div>
+    <script type="module" src="/src/index.ts"></script>
+  </body>
+</html>

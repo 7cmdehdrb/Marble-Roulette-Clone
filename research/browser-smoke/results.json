@@ -1,0 +1,103 @@
+{
+  "baseURL": "http://127.0.0.1:4173",
+  "generatedAt": "2026-10-15T05:29:22.166Z",
+  "results": [
+    {
+      "map": 0,
+      "title": "Wheel of fortune",
+      "mode": "first",
+      "range": [
+        0,
+        0
+      ],
+      "winners": 1,
+      "status": "passed",
+      "raceMs": 5665,
+      "goal": {
+        "winner": "키위",
+        "winners": [
+          "키위"
+        ]
+      },
+      "announcement": "당첨: 키위",
+      "durationMs": 9308,
+      "pageErrors": [],
+      "failedRequests": [],
+      "httpErrors": [],
+      "externalRequests": []
+    },
+    {
+      "map": 1,
+      "title": "BubblePop",
+      "mode": "last",
+      "range": [
+        5,
+        5
+      ],
+      "winners": 1,
+      "status": "passed",
+      "raceMs": 8876,
+      "goal": {
+        "winner": "귤",
+        "winners": [
+          "귤"
+        ]
+      },
+      "announcement": "당첨: 귤",
+      "durationMs": 12333,
+      "pageErrors": [],
+      "failedRequests": [],
+      "httpErrors": [],
+      "externalRequests": []
+    },
+    {
+      "map": 2,
+      "title": "Pot of greed",
+      "mode": "multi",
+      "range": [
+        1,
+        2
+      ],
+      "winners": 2,
+      "status": "passed",
+      "raceMs": 3615,
+      "goal": {
+        "winner": "수박",
+        "winners": [
+          "수박",
+          "키위"
+        ]
+      },
+      "announcement": "당첨: 수박, 키위",
+      "durationMs": 7068,
+      "pageErrors": [],
+      "failedRequests": [],
+      "httpErrors": [],
+      "externalRequests": []
+    },
+    {
+      "map": 3,
+      "title": "Yoru ni Kakeru",
+      "mode": "custom",
+      "range": [
+        2,
+        2
+      ],
+      "winners": 1,
+      "status": "passed",
+      "raceMs": 13759,
+      "goal": {
+        "winner": "귤",
+        "winners": [
+          "귤"
+        ]
+      },
+      "announcement": "당첨: 귤",
+      "durationMs": 17374,
+      "pageErrors": [],
+      "failedRequests": [],
+      "httpErrors": [],
+      "externalRequests": []
+    }
+  ]
+}

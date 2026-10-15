@@ -1,0 +1,1 @@
+module.exports = __parcel__import__.meta.resolve("juMvj");

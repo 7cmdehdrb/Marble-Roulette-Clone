@@ -1,0 +1,13 @@
+{
+  "checks": [
+    "responsive layouts at 320/390/750/751/1024/1440 pixels",
+    "mobile theme, winner range and map gallery",
+    "empty input disables start; duplicate and special names work",
+    "name, map and theme persistence after reload",
+    "immediate recording cancellation leaves the new round stationary",
+    "real recording download: webm, 2067335 bytes",
+    "finished round restarts and resets correctly"
+  ],
+  "pageErrors": [],
+  "status": "passed"
+}

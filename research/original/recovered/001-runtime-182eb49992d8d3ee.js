@@ -1,0 +1,1 @@
+module.exports = (__parcel__import__("8BShk")).then(() => parcelRequire('jaZ7o'));
